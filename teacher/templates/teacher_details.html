@@ -1,0 +1,36 @@
+{% extends 'layout/base.html' %}
+{% block title %}Teacher Details{% endblock %}
+{% block body %}
+    <h1>Teacher Details</h1>
+    <div class="card">
+
+    </div>
+    <script>
+        $('#home').removeClass('active')
+        $('#student').removeClass('active')
+        $('#teacher').addClass('active')
+        var path=window.location.pathname.split('/')
+        console.log("id")
+        console.log(path[3])
+        
+        $.ajax({
+            type:"GET",
+            url: "http://127.0.0.1:8000/teacher/teacher_details_api/"+path[3]+"/", 
+            success: function(rrr){
+                $('.card').html(`
+                    <div class="card-body">
+                        <p class="card-text">${ rrr.id }</p>
+                        <img class="card-img-top" src="${ rrr.profile_picture }" alt="Card image" style="width:100%">
+                        <h4 class="card-title">First Name : ${ rrr.first_name }</h4>
+                        <h4 class="card-title">Last Name : ${ rrr.last_name }</h4>
+                        <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+                        <a href="/teacher/teacher_list/" class="btn btn-primary">Back</a>
+                    </div>                
+                `)
+            },
+            error: function(errormsg){
+                console.log(errormsg)
+            }
+        });
+    </script>
+{% endblock %}

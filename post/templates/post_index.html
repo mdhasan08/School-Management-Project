@@ -1,0 +1,46 @@
+{% extends 'layout/base.html' %}
+{% block title %}Post Dashboard{% endblock %}
+{% block body %}
+    <h2>Post here......</h2>
+    <form id="main_post" enctype="multipart/form-data" method="POST" action="#">
+        {% csrf_token %}
+        <label for="post">Post</label><br>
+        <input type="text" id="post" name="post" placeholder="Drop your post"><br>
+
+        <label for="post_picture">Photo</label><br>
+        <input type="file" id="post_picture" name="post_picture" ><br><br>
+
+        <button type="submit">Post</button>
+      </form> 
+      
+      <h3>If you click the "Submit" button, the form-data will be sent.</h3>
+    <script>
+        $('#post').addClass('active')
+        $('#home').removeClass('active')
+        $('#student').removeClass('active')
+        $('#teacher').removeClass('active')
+        $('#facilities').removeClass('active')
+        $('#main_post').submit(function(event){
+            event.preventDefault()
+            var data_str = new FormData(document.getElementById('main_post'));
+            var image = document.forms["main_post"]["post_picture"].value;
+            $.ajax({
+                type: "POST",
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                url: "http://127.0.0.1:8000/post/post_api/",
+                data: data_str,
+                enctype:'multipart/form-data',
+                processData:false,
+                async:false,
+                cache:false,
+                contentType:false,
+                success:function(value){
+                    console.log("Success")
+                },error:function(errormsg){
+                    console.log(errormsg)
+                }
+
+            });
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'layout/base.html' %}
+{% block title %} Student Details {% endblock %}
+{% block body %}
+    <h1>Student Details</h1>
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="{{ media_url }}{{ data.profile_picture }}" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">First Name : {{ data.first_name }} (Id : {{data.id}})</h5>
+          <h5>Last Name : {{ data.last_name }}</h5>
+          <p class="card-text">Blood Group : {{ data.blood_group }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Gender : {{ data.gender }}</li>
+          <li class="list-group-item">Class : {{ data1.student_class }}</li>
+          <li class="list-group-item">Roll : {{ data1.class_roll }}</li>
+        </ul>
+        <div class="card-body">
+          <a href="#" class="card-link">Mail : {{ data.email }}</a>
+          <a href="/student/student_list/" class="card-link"><button class="btn btn-primary text=dark">Back</button></a>
+        </div>
+    </div>
+<script>
+    $('#home').removeClass('active')
+    $('#student').addClass('active')
+</script>
+{% endblock %}

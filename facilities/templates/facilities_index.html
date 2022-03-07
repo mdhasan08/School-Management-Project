@@ -1,0 +1,25 @@
+{% extends 'layout/base.html' %}
+{% block title %}Facilities Dashboard{% endblock %}
+{% block body %}
+    <h2>Facilities Dashboard....on going</h2>
+    {% for dt in data %}
+        <div class="card bg-dark text-white">
+            <img class="card-img" src="{{ media_url }}{{ dt.background_image }}" alt="Card image">
+            <div class="card-img-overlay">
+            <h1 class="card-title">{{ dt.title }}</h1>
+            <p class="card-text"  style="font-size: 1.5em;">{{ dt.description }}</p>
+            <p class="card-text">Last updated 3 mins ago</p>
+            </div>
+        </div>
+    {% endfor %}
+    <script>
+        $('#facilities').addClass('active')
+        $('#home').removeClass('active')
+        $('#student').removeClass('active')
+        $('#teacher').removeClass('active')
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:8000/facilities/index_api/",
+        });
+    </script>
+{% endblock %}

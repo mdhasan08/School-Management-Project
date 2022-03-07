@@ -1,0 +1,30 @@
+{% extends 'layout/base.html' %}
+{% block title %} Student Dashboard {% endblock %}
+{% block body %}
+    <div>
+        <h2>Student Dashboard</h2>
+        <a target="_blank" href="/student/student_list/"><button class="btn btn-outline-danger">Student List</button></a>
+    </div><br>
+    <div class="t">Text for test purpose</div>
+    <div>
+        <button class="sum btn btn-outline-primary" onclick="sum_sub('+')">Sum(+)</button>
+        <div class="value"></div>
+        <button class="sub btn btn-outline-primary" onclick="sum_sub('-')">Sub(-)</button>
+    </div>
+    <script>
+        $('#home').removeClass('active')
+        $('#teacher').removeClass('active')
+        $('#student').addClass('active')
+        $('.t').html('')
+        var count=0
+        $('.value').html(count)
+        function sum_sub (value){
+            if (value==='+'){
+                count++;
+            }else{
+                count--;
+            }
+            $('.value').html(count)
+        }
+    </script>
+{% endblock %}

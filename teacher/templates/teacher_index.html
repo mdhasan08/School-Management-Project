@@ -1,0 +1,44 @@
+{% extends 'layout/base.html' %}
+{% block title %}Teacher Dashboard{% endblock %}
+{% block body %}
+    <div>
+        <h1>Teacher Dashboard</h1>
+        <a href="/teacher/teacher_list"><button type="button" class="btn btn-outline-secondary btn-lg">Teacher List</button></a>
+    </div><br>
+    <div id="tester">
+        It is a Hyper Text Markup Languge
+    </div>
+    <div id="test">
+        <button id="sum" type="button" class="btn btn-outline-danger btn-lg" onclick="sum_sub('+')">+</button>
+        <p id="value"></p>
+        <button id="sub" class="btn btn-outline-danger btn-lg" onclick="sum_sub('-')">-</button>
+    </div>
+    <div id="test_script"></div>
+    <div class="testing"></div>
+    
+    <script>
+        $('#teacher').addClass('active')
+        $('#home').removeClass('active')
+        $('#student').removeClass('active')
+
+        // for(var i=0; i<10; i++){
+        //     // $('#test_script').html('Mine')
+        //     $('#test_script').append('<h6>'+i+'Mine'+"</h6><br>")
+        //     $('.testing').append('<h6>'+i+'You'+"</h6><br>")
+        // }
+        $('#tester').html('')
+        var count=0
+        $('#value').html(count)
+        function sum_sub(value){
+            if (value==='+'){
+                count++;
+            }
+            else{
+                count--;
+            }
+            $('#value').html(count)                
+
+        }
+    </script>
+    
+{% endblock %}

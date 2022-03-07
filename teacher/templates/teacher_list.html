@@ -1,0 +1,74 @@
+{% extends 'layout/base.html' %}
+{% block title%} Teacher List {% endblock %}
+{% block body %}
+<h1>Teacher Dashboard</h1>
+<h1>Search by salary</h1>
+<form id="form">
+  <label for="cars">Choose a Teacher:</label>
+  <select name="salary" id="salary">
+    <optgroup label="Under 50000">
+      <option value="10000">10000</option>
+      <option value="20000">20000</option>
+      <option value="30000">30000</option>
+      <option value="40000">40000</option>
+      <option value="50000">50000</option>
+    </optgroup>
+    <optgroup label="Over 50000">
+      <option value="60000">60000</option>
+      <option value="70000">70000</option>
+      <option value="80000">80000</option>
+      <option value="90000">90000</option>
+      <option value="100000">10000</option>
+    </optgroup>
+  </select>
+  <br><br>
+  <input type="submit" value="Submit">
+</form>
+    <div class="card container" style="max-width: 540px;">
+
+    </div>      
+<script>
+    $('#home').removeClass('active')
+    $('#student').removeClass('active')
+    $('#teacher').addClass('active')
+    console.log('This is my piranha')
+    function hide_value(id){
+        $('#main-'+id).hide()
+    }                
+    $.ajax({
+        type:"GET",
+        url: "http://127.0.0.1:8000/teacher/teacher_list_api/",
+        data: "",
+        success: function(rrr){
+            for(var x=0;x<rrr.length;x++){
+                // $('.id').append(value[x].id)
+                // $('.first_name').append(value[x].first_name)
+                // $('.last_name').append(value[x].last_name)
+                // $('.father_name').append(value[x].father_name)
+                // $('.mother_name').append(value[x].mother_name)
+                $('.card').append(`
+                    <div class="card-body" id="main-${ rrr[x].id }">
+                        <img class="card-img-top" src="${ rrr[x].profile_picture }" alt="Card image cap">
+                        <div>Id : ${ rrr[x].id}</div>
+                        <h5>First Name : ${ rrr[x].first_name }</h5>
+                        <h5>Last Name : ${ rrr[x].last_name }</h5>
+                        <h6>Father Name : ${ rrr[x].father_name }</h6>
+                        <h6>Mother Name : ${ rrr[x].mother_name }</h6>
+                        <p>Blood Group : ${ rrr[x].blood_group }</p>
+                        <p>Email : ${ rrr[x].email }</p>
+                        <p>Address : ${ rrr[x].address }</p>
+                        <a href="/teacher/teacher_details/${ rrr[x].id }/" target="_blank"><button class="btn btn-outliner-primary">Details</button></a>
+                        <a target="_blank" onclick="hide_value(${ rrr[x].id})"><button class="btn btn-outliner-primary">Hide</button></a>
+                    </div>
+                `)
+            }
+        },
+        error: function(errormsg){
+            console.log(errormsg)
+        }
+    });    
+    $('#salary').change(function(){
+        console.log($('#salary').val())
+    })  
+</script>
+{% endblock %}

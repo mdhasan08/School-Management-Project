@@ -1,0 +1,40 @@
+{% extends 'layout/base.html %}
+{% block title %}Student{% endblock %}
+{% block body %}
+
+    {% for dt in val %}
+
+        <ul>
+            <li>Id : {{ dt.id }}</li>
+            <li>First Name : {{ dt.first_name }}</li>
+            <li>Last Name : {{ dt.last_name }}</li>
+            <li>Father Name : {{ dt.father_name }}</li>
+            <li>Mother Name : {{ dt.mother_name }}</li>
+            <li>Gender : {{ dt.gender }}</li>
+            <li>Birth Date : {{ dt.birth_date }}</li>
+            <li>Religion : {{ dt.religion }}</li>
+            <li>E-mail : {{ dt.email }}</li>
+            <li>Phone No : {{ dt.phone }}</li>
+            <li>Guardian Phone No : {{ dt.guardian_phone }}</li>
+            <li>Address : {{ dt.address }}</li>
+            <li>Blood Group : {{ dt.blood_group }}</li>
+            <li>Nationality : {{ dt.nationality }}</li>
+        </ul>
+
+    {% endfor %}
+
+
+    Total Student in Class found's : {{ total_count}}
+    {% for dt in value %}
+        <ul>
+            <!-- <li>Id : {{ dt.student.id }}</li> -->
+            <li>Id : {{ dt.id }}</li>
+            <li>First Name : {{ dt.student.first_name }}</li>
+            <li>Last Name : {{ dt.student.last_name }}</li>
+            <li>Class : {{ dt.student_class}}</li>
+            <li>Section : {{ dt.section}}</li>
+            <li>Roll : {{ dt.class_roll}}</li>
+            <li>Admission Date : {{ dt.admission_date }}</li>            
+        </ul>
+    {% endfor %}
+{% endblock %}

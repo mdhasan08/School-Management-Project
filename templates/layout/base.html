@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}{% endblock %}
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" language="Javascript" src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.11.3.min.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}base{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/base_style.css' %}">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+       <!-- {#    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>#} -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div>
+            {% include 'layout/header.html' %}
+            <div class="container">
+                {% block body %}
+                <div style="padding-left:16px">
+                  <h2>Top Navigation Example</h2>
+                  <p>Some content..</p>
+                </div>
+            {% endblock %}
+            </div>
+            {% include 'layout/footer.html' %}
+        </div>       
+    </body>
+
+    <script>
+        var access = localStorage.getItem('access')
+        var name = localStorage.getItem('username')
+        var fn = localStorage.getItem('first_name')
+        if (access){
+            $('#student_sign_up').hide()
+            $('#student_sign_in').hide()
+            
+            $('.topnav').append(`<a id="" style="text-decoration: none;" href="#">${ fn }</a>`)
+        }
+    </script> 
+</html>

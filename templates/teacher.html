@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'style.css' %}" >
+        <title>{% block title %} Teacher {% endblock %}</title>
+    </head>
+    <body>
+    {% include 'layout/base.html' %}
+    {% block body %}
+        {% for i in value %}
+            <h3>Name and mail of teacher</h3>
+            <ul>
+                <li>First Name : {{ i.first_name }}</li>
+                <li>Last Name : {{ i.last_name }}</li>
+                <li>Email : {{ i.email }}</li>
+            </ul>
+            {% if i.Teacher_Educaional_Qualification.all %}
+                <h3>The list of educational qualification</h3>
+                {% for j in i.Teacher_Educaional_Qualification.all %}
+                <ul>
+                    <li>Degree : {{ j.degree }}</li>
+                    <li>Institue : {{ j.institue }}</li>
+                    <li>Passing Year : {{ j.passing_year }}</li>
+                    <li>Board : {{ j.board }}</li>
+                    <li>Point Out of : {{ j.point_out_of }}</li>
+                    <li>Grade Point : {{ j.grade_point }}</li>
+                </ul>                  
+                {% endfor %}<br>
+            {% endif %}
+            {% if i.Teacher_Experience.all %}
+            <h3>The list of experience</h3>
+                {% for k in i.Teacher_Experience.all %}
+                <ul>
+                    <li>Institute_name : {{ k.institute_name }}</li>
+                    <li>Job Designation : {{ k.job_designation }}</li>
+                    <li>Joining Year : {{ k.joining_year }}</li>
+                    <li>Job Duration : {{ k.job_duration }}</li>
+                </ul>                    
+                {% endfor %}
+            {% endif %}
+        {% endfor%}       
+    {% endblock %}
+    </body>
+</html>
+
+
+
+
