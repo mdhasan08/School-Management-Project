@@ -40,10 +40,11 @@ def header(request):
 
 def student_index(request):
     return render(request,'student_index.html')
-
+# git test
 
 def student_list(request):
     data_val = Student.objects.filter().all().order_by('id')
+
     from School_Management import settings
     media_url = settings.MEDIA_URL
     return render(request,'student_list.html',{'data':data_val,'media_url':media_url})
