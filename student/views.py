@@ -37,7 +37,7 @@ def root1(request,sc):
 def header(request):
     return render(request,'layout/header.html')
 
-
+# this is for test
 def student_index(request):
     return render(request,'student_index.html')
 # git test
