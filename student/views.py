@@ -40,7 +40,6 @@ def header(request):
 
 def student_index(request):
     return render(request,'student_index.html')
-# git test
 
 def student_list(request):
     data_val = Student.objects.filter().all().order_by('id')
