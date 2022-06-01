@@ -2,33 +2,39 @@
 {% block title %}Student | Sign up Dashboard{% endblock %}
 {% block body %}
 <h3>Sign up here.....</h3>
-    {% csrf_token %}
-<div id="main_input">       
-    <label for="first_name">First name : </label>
-    <input type="text" id="first_name" name="first_name" value="" placeholder="First Name"><br>
+<div id="main_input">   
+    <form enctype="multipart/form-data" id="form_sign_up" method="POST">
+        {% csrf_token %}    
+        <label for="first_name">First name : </label>
+        <input required title = "First name is required" type="text" id="first_name" name="first_name" value="" placeholder="First Name"><br>
 
-    <label for="last_name">Last name : </label>
-    <input type="text" id="last_name" name="last_name" value="" placeholder="Last Name"><br>
+        <label for="last_name">Last name : </label>
+        <input required title = "First name is required" type="text" id="last_name" name="last_name" value="" placeholder="Last Name"><br>
 
-    <label for="gender">Gender : </label>
-    <select name="gender" id="gender">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-    </select><br>
+        <label for="gender">Gender : </label>
+        <select required title="Select you gender" name="gender" id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select><br>
 
-    <label for="birth_date">Birth Date : </label>
-    <input type="date" id="birth_date" name="birth_date" value="" placeholder="Birth Date"><br>
+        <label for="birth_date">Birth Date : </label>
+        <input required title="Please enter your correct date of birth" type="date" id="birth_date" name="birth_date" value="" placeholder="Birth Date"><br>
 
-    <label for="phone">Phone : </label>
-    <input type="text" id="phone" name="phone" value="" placeholder="Phone"><br>
+        <label for="phone">Phone : </label>
+        <input required pattern="^01[13-9]\d{8}$" title="Please enter a valid phone number" type="text" id="phone" name="phone" value="" placeholder="Phone"><br>
 
-    <label for="email">Email : </label>
-    <input type="email" id="email" name="email" value="" placeholder="Email"><br>
+        <label for="profile_pic">Image : </label>
+        <input required pattern="/\.(jpe?g|png|gif|bmp)$/i" type="file" id="profile_pic" name="profile_pic" placeholder="profile_pic"><br>
 
-    <label for="password">Password : </label>
-    <input type="password" id="password" name="password" value="" placeholder="Password"><br><br>
+        <label for="email">Email : </label>
+        <input required pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" title="Please enter a valid email" type="email" id="email" name="email" value="" placeholder="Email"><br>
 
-    <input id="sign_up_submit" type="submit" value="Create Account">
+        <label for="password">Password : </label>
+        <input required pattern="(?=.*?[0-9])(?=.*?[A-Za-z]).+" title="Please enter a valid password" type="password" id="password" name="password" value="" placeholder="Password"><br><br>
+        <div id="error"><h4></h4></div>
+        <!-- <input id="sign_up_submit" type="submit" value="Create Account"> -->
+        <div><button type="submit">Create account</button></div>
+    </form>
 </div>
 <div id="main_otp">
     <p id="error"></p>
@@ -44,21 +50,35 @@
     $('#teacher').removeClass('active')
     $('#student_sign_up').addClass('active')  
     $('#main_otp').hide()  
-    $('#sign_up_submit').click(function(){
-        var data_str={}
-        data_str['first_name']=$('#first_name').val()
-        data_str['last_name']=$('#last_name').val()
-        data_str['gender']=$('#gender').val()
-        data_str['birth_date']=$('#birth_date').val()
-        data_str['phone']=$('#phone').val()
-        data_str['email']=$('#email').val()
-        data_str['password']=$('#password').val()
-        $.ajax({
+    // $('#sign_up_submit').click(function(){
+    $('#form_sign_up').submit(function(event){
+        // var data_str={}
+        // data_str['first_name']=$('#first_name').val()
+        // data_str['last_name']=$('#last_name').val()
+        // data_str['gender']=$('#gender').val()
+        // data_str['birth_date']=$('#birth_date').val()
+        // data_str['phone']=$('#phone').val()
+        // data_str['profile_pic']=$('#profile_pic').val()
+        // data_str['email']=$('#email').val()
+        // data_str['password']=$('#password').val()
+        event.preventDefault()
+        var data_str = new FormData(document.getElementById('form_sign_up'))
+        var image = document.forms["form_sign_up"]["profile_pic"].value;
+        console.log(image)
+        image = image.split('.')
+        if(image[(image.length)-1]==='jpg'){
+            $.ajax({
             type:"POST",
-            url:"http://127.0.0.1:8000/student/student_sign_up_api/",
-            data:JSON.stringify(data_str),
             headers: { "X-CSRFToken": '{{csrf_token}}' },
+            enctype: 'multipart/form-data',
+            processData: false,
+            async: false,
+            cache: false,
+            contentType: false,
+            url:"http://127.0.0.1:8000/student/student_sign_up_api/",
+            data:data_str,           
             success:function(value){
+                console.log(value)
                 if(value.status==200){
                     console.log(value.Email)
                     localStorage.setItem('email',value.Email)
@@ -70,6 +90,9 @@
                 console.log(errormsg)
             }
         });
+        }else{
+            $('#error').html("Please upload a valid image")
+        }
     })
 
 

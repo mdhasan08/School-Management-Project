@@ -2,68 +2,38 @@
 {% block title %} Student List {% endblock %}
 {% block body %}
     <h1>Student List</h1>
-    <!-- {% for dt in data %}
-    <div class="card mb-3" style="max-width: 540px;">
-        <div class="row no-gutters">
-          <div class="col-md-4">
-            <img src="{{media_url}}{{ dt.profile_picture }}" class="card-img" alt="...">
-            </div>
-                <div class="col-md-8">
-                <div class="card-body">
-                    <div class="id">Id : {{ dt.id }}</div>  
-                    <h5 class="card-title-fn">First Name : {{ dt.first_name }}</h5>
-                    <h5 class="card-title-ln">Last Name : {{ dt.last_name }}</h5>
-                    <h6 class="card-gender">Gender : {{ dt.gender }}</h6>
-                    <h6 class="card-address">Address : {{ dt.address }}</h6>
-                    <h6 class="card-mail"><small class="text-muted">Mail : {{ dt.email }}</small></h6>
-                    <a target="_blank" href="/student/student_details/{{ dt.id }}" class="card-details"><button class= "btn bg-secondary text-light">Details</button></a>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endfor %} -->
-    <div class="card">
 
-    </div>
+    <div class="card"></div>
+
 <script>
     $('#home').removeClass('active')
     $('#student').addClass('active')
     $.ajax({
-        headers : {Authorization : 'Bearer '+localStorage.getItem('access')},
-        type : "GET",
-        url : "http://127.0.0.1:8000/student/student_list_api/",
-        success : function(rrr){
-            for(var x=0; x<rrr.length; x++){
-                console.log(rrr)
-                $('.card').append(`
-                    <div class="card mb-3" style="max-width: 540px;">
-                    <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <img src="${ rrr[x].profile_picture }" class="card-img" alt="...">
+            // headers: {Authorization: 'Bearer '+localStorage.getItem('access')},
+            type:"GET",
+            url: "http://127.0.0.1:8000/student/student_list_api/",
+            success: function(value){
+                for(var x = 0; x < value.length; x++){
+                    console.log(value)
+                    $('.card').append(`
+                        <div class="card-header">
+                            Id : ${ value[x].id }
                         </div>
-                            <div class="col-md-8">
-                            <div class="card-body">
-                                <div class="id">Id : ${ rrr[x].id }</div>  
-                                <h5 class="card-title-fn">First Name : ${ rrr[x].first_name }</h5>
-                                <h5 class="card-title-ln">Last Name : ${ rrr[x].last_name }</h5>
-                                <h6 class="card-gender">Gender : ${ rrr[x].gender }</h6>
-                                <h6 class="card-address">Address : ${ rrr[x].address }</h6>
-                                for(var y=0; y<rrr.Class_Information.length; y++){
-                                    <h6>Class : ${ rrr.Class_Information[y].student_class }</h6>
-                                }
-                                <h6 class="card-mail"><small class="text-muted">Mail : ${ rrr[x].email }</small></h6>
-                                <a target="_blank" href="/student/student_details/${ rrr[x].id }" class="card-details"><button class= "btn bg-secondary text-light">Details</button></a>
-                            </div>
-                            </div>
+                        <div class="card-body">
+                            <h5 class="card-title">First name : ${ value[x].first_name }</h5>
+                            <h5 class="card-title">Last name : ${ value[x].last_name }</h5>
+                            <p class="card-text">Gender: ${ value[x].gender } </p>
+                            <p class="card-text">Phone : ${ value[x].phone } </p>
+                            <p class="card-text">Joined : ${ value[x].session } </p>
+                            <p class="card-text">Email : ${ value[x].email } </p>
+                            <a target="_blank" href="/student/student_details/${ value[x].id }/" class="btn btn-primary">Details</a>
                         </div>
-                    </div>
-                `)
+                    `)
+                }
+            },
+            error: function(errormsg){
+                console.log(errormsg)
             }
-        },
-        error : function(errormsg){
-            console.log(errormsg)
-        }
-
-    });
+        });
 </script>
 {% endblock %}

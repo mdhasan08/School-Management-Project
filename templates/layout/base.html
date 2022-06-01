@@ -29,7 +29,7 @@
         </div>       
     </body>
 
-    <script>
+    <!-- <script>
         var access = localStorage.getItem('access')
         var name = localStorage.getItem('username')
         var fn = localStorage.getItem('first_name')
@@ -39,5 +39,25 @@
             
             $('.topnav').append(`<a id="" style="text-decoration: none;" href="#">${ fn }</a>`)
         }
-    </script> 
+    </script>  -->
+    <script>
+        let log_Info = document.cookie
+                                        .split(';')
+                                        .map(cookie => cookie.split('='))
+                                        .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+    
+        if (log_Info.access){
+            $('#student_sign_up').hide()
+            $('#student_sign_in').hide()
+            $('#profile').show()
+            $('#user').html(`${log_Info.first_name}`)
+            $('#log_out').show()
+        }
+        else {
+            $('#student_sign_up').show()
+            $('#student_sign_in').show()
+            $('#profile').hide()
+            $('#log_out').hide()
+        }
+    </script>
 </html>

@@ -11,7 +11,19 @@ class StudentAdmin(admin.ModelAdmin):
         # queryset = Student.objects.filter(is_archived=True).all()
         queryset = Student.objects.filter().order_by('id')
         return queryset
-    fields = [('first_name', 'last_name','user'), ('father_name', 'mother_name'), 'profile_picture', ('gender', 'religion', 'blood_group'), 'birth_date', ('email', 'phone', 'phone_active'), ('guardian_phone', 'guardian_phone_active'), 'is_archived', ('nationality', 'session')]
+    fields = [
+        ('first_name', 'last_name', 'user', 'slug'),
+        ('father_name', 'mother_name'),
+        ('profile_picture'),
+        ('gender', 'religion', 'blood_group'),
+        ('birth_date'),
+        ('address'),
+        ('email', 'phone', 'phone_active'),
+        ('guardian_phone', 'guardian_phone_active'),
+        ('is_archived'),
+        ('nationality', 'session')
+    ]
+    readonly_fields = ["slug"]
     search_fields = ['first_name__icontains', 'phone__icontains']
     list_filter = (
         ('gender', DropdownFilter),

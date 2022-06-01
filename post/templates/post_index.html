@@ -1,26 +1,40 @@
 {% extends 'layout/base.html' %}
 {% block title %}Post Dashboard{% endblock %}
 {% block body %}
-    <h2>Post here......</h2>
-    <form id="main_post" enctype="multipart/form-data" method="POST" action="#">
-        {% csrf_token %}
-        <label for="post">Post</label><br>
-        <input type="text" id="post" name="post" placeholder="Drop your post"><br>
+    <h1 id="main_head" style="margin-left: 400px;">Post Dashboard</h1><br/>
+        <h1 id="apih" style="margin-left: 400px;">All post's is here</h1>
+        <a id="post_now"><button class=" btn btn-danger btn-lg" style="width: 300px; margin-left: 400px;">Post Now</button></a><br/><br/>
+        <a id="view_post" href="/post/post_list/"><button class=" btn btn-danger btn-lg" style="width: 300px; margin-left: 400px;">View student's Post</button></a>
 
-        <label for="post_picture">Photo</label><br>
-        <input type="file" id="post_picture" name="post_picture" ><br><br>
-
-        <button type="submit">Post</button>
-      </form> 
+    
+    <div id="main_input">
+        
+    </div>
+    <div class="card mb-3"></div>  
       
-      <h3>If you click the "Submit" button, the form-data will be sent.</h3>
     <script>
         $('#post').addClass('active')
         $('#home').removeClass('active')
         $('#student').removeClass('active')
         $('#teacher').removeClass('active')
         $('#facilities').removeClass('active')
-        $('#main_post').submit(function(event){
+        $('#main_post').hide()
+        $('#post_now').click(function(){
+            $('#main_input').html(`
+                <form id="main_post" enctype="multipart/form-data" method="POST" action="#">
+                    {% csrf_token %}
+                    <h2>Post here......</h2>
+                    <label for="post">Post</label><br>
+                    <input type="text" id="post" name="post" value="" placeholder="Drop your post"><br>
+            
+                    <label for="post_picture">Photo</label><br>
+                    <input type="file" id="post_picture" value="" name="post_picture" ><br><br>
+            
+                    <button type="submit">Post</button>
+                    <h3>If you click the "Submit" button, the form-data will be sent.</h3>
+                </form> 
+            `)
+            $('#main_input').submit(function(event){
             event.preventDefault()
             var data_str = new FormData(document.getElementById('main_post'));
             var image = document.forms["main_post"]["post_picture"].value;
@@ -36,10 +50,39 @@
                 contentType:false,
                 success:function(value){
                     console.log("Success")
+                    window.location = 'http://127.0.0.1:8000/post/'
                 },error:function(errormsg){
                     console.log(errormsg)
                 }
 
+            });
+        })
+
+        })
+        
+
+
+        $('#view_post').click(function(){
+            $('#post_now').hide()
+            $('#view_post').hide()
+            $('#main_head').hide()
+            $('#apih').show()
+            $.ajax({
+                type : "GET",
+                url : "http://127.0.0.1:8000/post/post_show_api/",
+                success : function(value){
+                    console.log(value)
+                    for(var x=0; value.length>x; x++){
+                        $('.card').append(`
+                                <div class="card-body" style="width: 700px">
+                                    <h5 class="card-title"></h5>
+                                    <p>${ value[x].post }</p>
+                                    <p><small class="text-muted">${ value[x].created_at }</small></p>
+                                </div>
+                                <img class="card-img-bottom container" src="${ value[x].post_picture }" alt="Card image cap" style="width: 680px; height: 490px">
+                        `)
+                    }
+                }
             });
         })
     </script>

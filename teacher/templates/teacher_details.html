@@ -16,16 +16,27 @@
         $.ajax({
             type:"GET",
             url: "http://127.0.0.1:8000/teacher/teacher_details_api/"+path[3]+"/", 
-            success: function(rrr){
-                $('.card').html(`
+            success: function(value){
+                 $('.card').html(`
+                    <img class="card-img-top" src="${ value.profile_picture }" alt="Card image cap">
                     <div class="card-body">
-                        <p class="card-text">${ rrr.id }</p>
-                        <img class="card-img-top" src="${ rrr.profile_picture }" alt="Card image" style="width:100%">
-                        <h4 class="card-title">First Name : ${ rrr.first_name }</h4>
-                        <h4 class="card-title">Last Name : ${ rrr.last_name }</h4>
-                        <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
-                        <a href="/teacher/teacher_list/" class="btn btn-primary">Back</a>
-                    </div>                
+                      <h5 class="card-title">First Name : ${ value.first_name } (Id : ${value.id})</h5>
+                      <h5>Last Name : ${ value.last_name }</h5>
+                      <p class="card-text">Email : ${ value.email }</p>
+                      <p class="card-text">Father Name : ${ value.father_name }</p>
+                      <p class="card-text">Mother Name : ${ value.mother_name }</p>
+                      <p class="card-text">Religion : ${ value.religion }</p>
+                      <p class="card-text">Gender : ${ value.gender }</p>
+                      <p class="card-text">Birth Date : ${ value.birth_date }</p>
+                      <p class="card-text">Phone : ${ value.phone }</p>
+                      <p class="card-text">Joining : ${ value.joining_date }</p>
+                      <p class="card-text">Rtirement: ${ value.retirement_date }</p>
+                      <p class="card-text">Address : ${ value.address }</p>
+                      <p class="card-text">Blood Group : ${ value.blood_group }</p>
+                      <p class="card-text">Salary : ${ value.salary }</p>
+                      <p class="card-text">Student : ${ value.student }</p>
+                      <a href="/student/student_list/" class="card-link"><button class="btn btn-primary text=dark">Back</button></a>
+                    </div>
                 `)
             },
             error: function(errormsg){

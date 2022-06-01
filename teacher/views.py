@@ -9,7 +9,12 @@ def index(request):
     data=Teacher.objects.filter().all()
     return render(request,'teacher_index.html',{'data':data})
 
-from rest_framework.generics import ListAPIView,CreateAPIView
+
+def teacher_list(request):
+    return render(request, 'teacher_list.html')
+
+
+from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
 from .serializers import TeacherListSerializer
 from django.db.models import Q
@@ -34,11 +39,6 @@ class TeacherList(ListAPIView):
         return Response(data_val)
 
 
-def teacher_list(request):
-    from School_Management import settings
-    media_url = settings.MEDIA_URL
-    return render(request,'teacher_list.html',{media_url:'media_url'})
-
 
 from rest_framework.utils import json
 class NewTeacherAdd(CreateAPIView):
@@ -47,7 +47,7 @@ class NewTeacherAdd(CreateAPIView):
         try:
             data_value = json.loads(request.body)
             teacher = Teacher()
-            if 'first_name' not in data_value or data_value['first_name']=='':
+            if 'first_name' not in data_value or data_value['first_name'] == '':
                 return Response("Please Fill your first name")
             teacher.first_name = data_value['first_name']
             teacher.last_name = data_value['last_name']
@@ -66,14 +66,14 @@ class NewTeacherAdd(CreateAPIView):
             teacher.save()
             return Response("Success")
         except Exception as ex:
-            return Response({"Please fill the":str(ex)},status=400)
+            return Response({"Please fill the": str(ex)}, status=400)
 
 
 
 
 class TeacherEdit(CreateAPIView):
     perimission_classes = []
-    def post (self,request,*args,**kwargs):
+    def post (self, request, *args, **kwargs):
         try:
             data_value = json.loads(request.body)
             teacher = Teacher.objects.filter(id=self.kwargs['id']).first()
@@ -93,19 +93,19 @@ class TeacherEdit(CreateAPIView):
             teacher.save()
             return Response("Success")
         except Exception as ex:
-            return Response({"Error",str(ex)},status=400)
+            return Response({"Error", str(ex)}, status=400)
 
 
 
 
-def teacher_details(request,id):
-    return render(request,'teacher_details.html')
+def teacher_details(request, id):
+    return render(request, 'teacher_details.html')
 
 from .serializers import TeacherDetailsSerializer
 
 class TeacherDetailsApi(ListAPIView):
-    permission_classes=[]
-    def get(self,request,id):
-        data_val= Teacher.objects.filter(id=id).first()
-        data_val = TeacherDetailsSerializer(data_val,many=False).data
+    permission_classes = []
+    def get(self, request, id):
+        data_val = Teacher.objects.filter(id=id).first()
+        data_val = TeacherDetailsSerializer(data_val).data
         return Response(data_val)

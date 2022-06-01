@@ -4,5 +4,5 @@ from .models import Facilities
 
 class FacilitiesAdmin(admin.ModelAdmin):
     # list_display=['title','description']
-    search_fields=['title__icontains']
-admin.site.register(Facilities,FacilitiesAdmin)
+    search_fields = ['title__icontains']
+admin.site.register(Facilities, FacilitiesAdmin)

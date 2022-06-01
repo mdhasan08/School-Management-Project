@@ -1,0 +1,30 @@
+{% extends 'layout/base.html' %}
+{% block title %}Post | List{% endblock %}
+{% block body %}
+<div class="card border-primary mb-3" style="max-width: 18rem;">
+
+</div>
+<script>
+    var path = window.location.pathname.split('/')
+    console.log(path[3])
+    $.ajax({
+        type : "GET",
+        headers: {Authorization: 'Bearer ' + x.token},
+        url : "http://127.0.0.1:8000/post/post_list/+"path[3]"+",
+        success : function(value){
+            for(var i=0; i<value.length; i++){
+                $(".card").append(`
+                    <div>
+                      <div class="card-header">Id : ${ value[i].id }</div>
+                      <div class="card-body text-primary">
+                        <h5 class="card-title">${ value[i].text }</h5>
+                        <img src="${ value[i].picture }">
+
+                      </div>
+                    </div>
+                `)
+            }
+        },
+    });
+</script>
+{% endblock %}

@@ -7,13 +7,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('',root),
+    path('', root),
     path('admin/', admin.site.urls),
-    path('student/',include('student.urls')),
-    path('teacher/',include('teacher.urls')),
-    path('facilities/',include('facilities.urls')),
-    path('post/',include('post.urls')),
-]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    path('student/', include('student.urls')),
+    path('teacher/', include('teacher.urls')),
+    path('facilities/', include('facilities.urls')),
+    path('post/', include('post.urls')),
+    path('settings/', include('settings.urls')),
+    path('about/', include('about.urls')),
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 admin.site.site_header = "Moinul Admin"

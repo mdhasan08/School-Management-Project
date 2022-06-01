@@ -4,7 +4,7 @@
 <h1>Teacher Dashboard</h1>
 <h1>Search by salary</h1>
 <form id="form">
-  <label for="cars">Choose a Teacher:</label>
+  <label for="salary">Choose a Teacher:</label>
   <select name="salary" id="salary">
     <optgroup label="Under 50000">
       <option value="10000">10000</option>
@@ -26,7 +26,7 @@
   <br><br>
   <input type="submit" value="Submit">
 </form>
-    <div class="card container" style="max-width: 540px;">
+    <div class="card" style="max-width: 540px;">
 
     </div>      
 <script>
@@ -36,33 +36,36 @@
     console.log('This is my piranha')
     function hide_value(id){
         $('#main-'+id).hide()
-    }                
+    }
     $.ajax({
         type:"GET",
         url: "http://127.0.0.1:8000/teacher/teacher_list_api/",
         data: "",
-        success: function(rrr){
-            for(var x=0;x<rrr.length;x++){
+        success: function(value){
+            for(var x=0;x<value.length;x++){
                 // $('.id').append(value[x].id)
                 // $('.first_name').append(value[x].first_name)
                 // $('.last_name').append(value[x].last_name)
                 // $('.father_name').append(value[x].father_name)
                 // $('.mother_name').append(value[x].mother_name)
+                console.log(value)
                 $('.card').append(`
-                    <div class="card-body" id="main-${ rrr[x].id }">
-                        <img class="card-img-top" src="${ rrr[x].profile_picture }" alt="Card image cap">
-                        <div>Id : ${ rrr[x].id}</div>
-                        <h5>First Name : ${ rrr[x].first_name }</h5>
-                        <h5>Last Name : ${ rrr[x].last_name }</h5>
-                        <h6>Father Name : ${ rrr[x].father_name }</h6>
-                        <h6>Mother Name : ${ rrr[x].mother_name }</h6>
-                        <p>Blood Group : ${ rrr[x].blood_group }</p>
-                        <p>Email : ${ rrr[x].email }</p>
-                        <p>Address : ${ rrr[x].address }</p>
-                        <a href="/teacher/teacher_details/${ rrr[x].id }/" target="_blank"><button class="btn btn-outliner-primary">Details</button></a>
-                        <a target="_blank" onclick="hide_value(${ rrr[x].id})"><button class="btn btn-outliner-primary">Hide</button></a>
-                    </div>
-                `)
+                        <div class="card-header">
+                            Id : ${ value[x].id }
+                        </div>
+                        <div class="card-body" id="main-${ value[x].id }">
+                          <img class="card-img-top" style="height: 300px" src="${ value[x].profile_picture }" alt="Card image cap">
+                            <h5 class="card-title">First name : ${ value[x].first_name }</h5>
+                            <h5 class="card-title">Last name : ${ value[x].last_name }</h5>
+                            <p class="card-text">Gender: ${ value[x].father_name } </p>
+                            <p class="card-text">Phone : ${ value[x].mother_name } </p>
+                            <p class="card-text">Joined : ${ value[x].blood_group } </p>
+                            <p class="card-text">Email : ${ value[x].email } </p>
+                            <p class="card-text">Address : ${ value[x].address }</p>
+                            <a href="/teacher/teacher_details/${ value[x].id }/" target="_blank"><button class="btn btn-outliner-primary">Details</button></a>
+                            <a target="_blank" onclick="hide_value(${ value[x].id})"><button class="btn btn-outliner-primary">Hide</button></a>
+                        </div>
+                    `)
             }
         },
         error: function(errormsg){

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Student,ClassInformation
+from .models import Student, ClassInformation
 from django.db.models import Prefetch
 # Create your views here.
 def root1(request):
@@ -17,7 +17,7 @@ def root(request):
     # data = Student.objects.filter().exclude(first_name='Ashik')
     data = Student.objects.filter(Q(first_name='Ashik') | Q(first_name='Rahim'))
     
-    return render(request,'student.html',{'val':data}) 
+    return render(request, 'student.html', {'val' : data})
 
 def root1(request,sc):
     data = ClassInformation.objects.filter().prefetch_related("Class_Information")#.order_by('admission_date')
@@ -32,30 +32,6 @@ def root1(request,sc):
     # data = ClassInformation.objects.filter(student__first_name='Adnan')
     # print(data.student.first_name)
     return render(request,'student.html',{'value':student_data,'total_count':total_count}) 
-
-
-def header(request):
-    return render(request,'layout/header.html')
-
-
-def student_index(request):
-    return render(request,'student_index.html')
-
-def student_list(request):
-    data_val = Student.objects.filter().all().order_by('id')
-
-    from School_Management import settings
-    media_url = settings.MEDIA_URL
-    return render(request,'student_list.html',{'data':data_val,'media_url':media_url})
-
-
-def student_details(request,id):
-    data_val = Student.objects.filter(id=id).first()
-    data_val1 = ClassInformation.objects.filter(student__id=id).last()
-    from School_Management import settings
-    media_url = settings.MEDIA_URL
-    return render(request, 'student_details.html', {'data': data_val, 'media_url': media_url, 'data1': data_val1})
-
 
 from django.contrib.auth.models import User, Group
 def is_student(user):
@@ -72,20 +48,47 @@ class IsStudent(BasePermission):
     def has_permission(self, request, view):
         return bool(request.user and request.user.is_authenticated and is_student(request.user.id))
 
-# class StudentListApi(ListAPIView):
-#     permission_classes = [IsStudent]
-#     def get(self,request):
-#         data_val = Student.objects.filter().all()
-#         print(data_val)
-#         data_val = StudentListSerilazers(data_val, many=True).data
-#         return Response(data_val)
+
+
+
+def header(request):
+    return render(request, 'layout/header.html')
+
+
+def student_index(request):
+    return render(request, 'student_index.html')
+
+def student_list(request):
+    data_val = Student.objects.filter().all().order_by('id')
+    from School_Management import settings
+    media_url = settings.MEDIA_URL
+    return render(request, 'student_list.html', {'data': data_val, 'media_url': media_url})
+
+
+# def student_details(request, id):
+#     data_val = Student.objects.filter(id=id).first()
+#     data_val1 = ClassInformation.objects.filter(student__id=id).last()
+#     from School_Management import settings
+#     media_url = settings.MEDIA_URL
+#     return render(request, 'student_details.html', {'data': data_val, 'media_url': media_url, 'data1': data_val1})
+
+def student_details(request, id):
+    return render(request, 'student_details.html')
+
+from rest_framework.generics import  ListAPIView
+class StudentDetailsApi(ListAPIView):
+    permission_classes = []
+    def get(self, request, id):
+        data_val = Student.objects.filter(id=id).first()
+        data_val = StudentListSerializers(data_val).data
+        return Response(data_val)
 
 
 class StudentListApi(ListAPIView):
     permission_classes = []
     def get(self, request):
-        data_val = Student.objects.filter().prefetch_related("Class_Information","Student_Subject").all()
-        data_val = StudentListSerializers(data_val,many = True).data
+        data_val = Student.objects.filter().prefetch_related("Class_Information")[0:100]
+        data_val = StudentListSerializers(data_val, many=True).data
         return Response(data_val)
 
 
@@ -103,6 +106,7 @@ import random
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from threading import Thread 
 def send_email(to, subject, body):
     smtp_server='smtp.gmail.com'
     smtp_port='465'
@@ -141,14 +145,18 @@ def send_email(to, subject, body):
         if server != None:
             server.quit()
 
-
+def thread_send_email(to, subject, body):
+    thread = Thread(target=(send_email), args=(to, subject, body))
+    thread.start()
 
 class SignUpApi(CreateAPIView):
     permission_classes=[]
     def post(self,request):
         result={}
         try:
-            data = json.loads(request.body)
+            # data = json.loads(request.body)
+            data = request.data
+            print(data)
             if 'first_name' not in data or data['first_name']=='':
                 result["Message"]="First Name required"
                 result["Error"]="First Name"
@@ -202,8 +210,18 @@ class SignUpApi(CreateAPIView):
                 student.email = data['email']
                 student.otp = random_number
                 student.user = user
+                print("first print")
+                if 'profile_pic' in data:
+                    if data['profile_pic'] == "" or not request.FILES['profile_pic']:
+                        result = {}
+                        result["Message"] = "Please upload a photo"
+                        result["Status"] = HTTP_400_BAD_REQUEST
+                        return Response(result)
+                        print("1234")
+                    else:
+                        student.profile_picture = request.FILES['profile_pic']
                 student.save()
-                send_email(data['email'], 'Student sign up OTP','Your OTP is: ' + str(random_number))
+                thread_send_email(data['email'], 'Student sign up OTP','Your OTP is: ' + str(random_number))
                 result={}
                 result["status"]=HTTP_200_OK
                 result["Message"]="Success"
@@ -216,19 +234,6 @@ class SignUpApi(CreateAPIView):
                     result['Message']='Your account is already active'
                     result['status']=HTTP_200_OK
                     return Response(result)
-                else:
-                    user.first_name = data['first_name']
-                    user.last_name = data['last_name']  
-                    user.password = make_password(data['password'])
-                    user.is_active = False
-                    user.save()
-                    random_number = random.randint(100000,900000)
-                    student = Student.objects.filter(user=user).first()
-                    student.first_name = data['first_name']
-                    student.last_name = data['last_name']
-                    student.otp = random_number
-                    student.save()
-                    send_email(data['email'], 'Student sign up OTP','Your OTP is: ' + str(random_number))
         except:
             return Response("False")
 
@@ -345,3 +350,14 @@ class StudentSignInApi(ListAPIView):
 
 def sign_in(request):
     return render(request,'student_sign_in.html')
+
+
+from django.http import HttpResponseRedirect
+
+def log_out(request):
+    response = HttpResponseRedirect('/')
+    response.delete_cookie('access')
+    response.delete_cookie('username')
+    response.delete_cookie('first_name')
+    response.delete_cookie('last_name')
+    return response

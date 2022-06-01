@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rangefilter',
     'facilities',
     'post',
+    'about',
 ]
 
 MIDDLEWARE = [

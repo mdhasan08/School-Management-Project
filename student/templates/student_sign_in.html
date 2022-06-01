@@ -126,7 +126,7 @@
 {% endblock %}
 {% block body %}
     <h1>Sign in Dashboard on going.....</h1>
-    <h2>Modal Login Form</h2>
+    <h2>Log in here...</h2>
     
 <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
 
@@ -198,19 +198,22 @@
         $.ajax({
             type : "POST",
             url : "http://127.0.0.1:8000/student/student_sign_in_api/",
+            contentType: 'application/json',
             data : JSON.stringify(data_str),
             headers: { "X-CSRFToken": '{{csrf_token}}' },
-            success : function(value){
-                if(value.status === 200){
-                    localStorage.setItem('access',value.access)
-                    localStorage.setItem('username',value.username)
-                    localStorage.setItem('first_name',value.first_name)
-                    localStorage.setItem('last_name',value.last_name)
-                    console.log(value)
-                    window.location = "/"
-                    
-                }
-            },
+            success: function (value){
+              if (value.status == 200){
+                  document.cookie = 'access='+value.access+';path=/'
+                  document.cookie = 'username='+value.username+';path=/'
+                  document.cookie = 'first_name='+value.first_name+';path=/'
+                  document.cookie = 'last_name='+value.last_name+';path=/'
+                  let x = document.cookie
+                          .split(';')
+                          .map(cookie => cookie.split('='))
+                          .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+                  window.location="/"
+              }
+          },
             error : function(errormsg){
                 console.log(errormsg)
             }
